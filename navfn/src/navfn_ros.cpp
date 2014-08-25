@@ -40,8 +40,6 @@
 #include <costmap_2d/cost_values.h>
 #include <costmap_2d/costmap_2d.h>
 
-#include <pcl_conversions/pcl_conversions.h>
-
 //register this planner as a BaseGlobalPlanner plugin
 PLUGINLIB_DECLARE_CLASS(navfn, NavfnROS, navfn::NavfnROS, nav_core::BaseGlobalPlanner)
 
@@ -67,10 +65,6 @@ namespace navfn {
       plan_pub_ = private_nh.advertise<nav_msgs::Path>("plan", 1);
 
       private_nh.param("visualize_potential", visualize_potential_, false);
-
-      //if we're going to visualize the potential array we need to advertise
-      if(visualize_potential_)
-        potarr_pub_.advertise(private_nh, "potential", 1);
 
       private_nh.param("allow_unknown", allow_unknown_, true);
       private_nh.param("planner_window_x", planner_window_x_, 0.0);
@@ -319,34 +313,6 @@ namespace navfn {
       else{
         ROS_ERROR("Failed to get a plan from potential when a legal potential was found. This shouldn't happen.");
       }
-    }
-
-    if (visualize_potential_){
-      //publish potential array
-      pcl::PointCloud<PotarrPoint> pot_area;
-      pot_area.header.frame_id = global_frame;
-      pot_area.points.clear();
-      std_msgs::Header header;
-      pcl_conversions::fromPCL(pot_area.header, header);
-      header.stamp = ros::Time::now();
-      pot_area.header = pcl_conversions::toPCL(header);
-
-      PotarrPoint pt;
-      float *pp = planner_->potarr;
-      double pot_x, pot_y;
-      for (unsigned int i = 0; i < (unsigned int)planner_->ny*planner_->nx ; i++)
-      {
-        if (pp[i] < 10e7)
-        {
-          mapToWorld(i%planner_->nx, i/planner_->nx, pot_x, pot_y);
-          pt.x = pot_x;
-          pt.y = pot_y;
-          pt.z = pp[i]/pp[planner_->start[1]*planner_->nx + planner_->start[0]]*20;
-          pt.pot_value = pp[i];
-          pot_area.push_back(pt);
-        }
-      }
-      potarr_pub_.publish(pot_area);
     }
 
     //publish the plan for visualization purposes

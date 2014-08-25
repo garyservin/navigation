@@ -48,7 +48,6 @@ Costmap2DPublisher::Costmap2DPublisher(ros::NodeHandle * ros_node, Costmap2D* co
     node(ros_node), costmap_(costmap), global_frame_(global_frame), active_(false), always_send_full_costmap_(always_send_full_costmap)
 {
   costmap_pub_ = ros_node->advertise<nav_msgs::OccupancyGrid>( topic_name, 1, boost::bind( &Costmap2DPublisher::onNewSubscription, this, _1 ));
-  costmap_update_pub_ = ros_node->advertise<map_msgs::OccupancyGridUpdate>( topic_name + "_updates", 1 );
 
   if( cost_translation_table_ == NULL )
   {
@@ -117,32 +116,6 @@ void Costmap2DPublisher::publishCostmap()
     prepareGrid();
     if (costmap_pub_.getNumSubscribers() > 0) {
       costmap_pub_.publish( grid_ );
-    }
-  }
-  else if (x0_ < xn_)
-  {
-    boost::shared_lock < boost::shared_mutex > lock(*(costmap_->getLock()));
-    // Publish Just an Update
-    map_msgs::OccupancyGridUpdate update;
-    update.header.stamp = ros::Time::now();
-    update.header.frame_id = global_frame_;
-    update.x = x0_;
-    update.y = y0_;
-    update.width = xn_ - x0_;
-    update.height = yn_ - y0_;
-    update.data.resize(update.width * update.height);
-
-    unsigned int i = 0;
-    for (unsigned int y = y0_; y < yn_; y++)
-    {
-      for (unsigned int x = x0_; x < xn_; x++)
-      {
-        unsigned char cost = costmap_->getCost(x, y);
-        update.data[i++] = cost_translation_table_[ cost ];
-      }
-    }
-    if (costmap_update_pub_.getNumSubscribers() > 0) {
-      costmap_update_pub_.publish(update);
     }
   }
 

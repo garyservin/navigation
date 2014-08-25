@@ -38,7 +38,6 @@
 #define TRAJECTORY_ROLLOUT_WORLD_MODEL_H_
 
 #include <vector>
-#include <costmap_2d/observation.h>
 #include <costmap_2d/footprint.h>
 #include <geometry_msgs/Point.h>
 #include <base_local_planner/planar_laser_scan.h>

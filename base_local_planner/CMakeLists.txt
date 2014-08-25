@@ -9,7 +9,6 @@ find_package(catkin REQUIRED
             message_generation
             dynamic_reconfigure
             nav_core
-            pcl_conversions
             rostest
             costmap_2d
             pluginlib
@@ -22,12 +21,10 @@ find_package(Boost REQUIRED
         )
 
 find_package(Eigen REQUIRED)
-find_package(PCL REQUIRED)
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
     ${EIGEN_INCLUDE_DIRS}
-    ${PCL_INCLUDE_DIRS}
 )
 add_definitions(${EIGEN_DEFINITIONS})
 
@@ -54,7 +51,6 @@ catkin_package(
     INCLUDE_DIRS include
     LIBRARIES
         base_local_planner
-        trajectory_planner_ros
     CATKIN_DEPENDS
         roscpp
         dynamic_reconfigure
@@ -77,44 +73,28 @@ add_library(base_local_planner
 	src/goal_functions.cpp
 	src/map_cell.cpp
 	src/map_grid.cpp
-	src/map_grid_visualizer.cpp
 	src/map_grid_cost_function.cpp
 	src/latched_stop_rotate_controller.cpp
 	src/local_planner_util.cpp
 	src/odometry_helper_ros.cpp
-	src/obstacle_cost_function.cpp
 	src/oscillation_cost_function.cpp
 	src/prefer_forward_cost_function.cpp
-	src/point_grid.cpp
-	src/costmap_model.cpp
 	src/simple_scored_sampling_planner.cpp
 	src/simple_trajectory_generator.cpp
-	src/trajectory.cpp
-	src/voxel_grid_model.cpp)
+	src/trajectory.cpp)
 add_dependencies(base_local_planner base_local_planner_gencfg)
 add_dependencies(base_local_planner base_local_planner_gencpp)
 add_dependencies(base_local_planner nav_msgs_gencpp)
 target_link_libraries(base_local_planner
     ${catkin_LIBRARIES}
-    ${PCL_LIBRARIES}
     ${Boost_LIBRARIES}
     ${Eigen_LIBRARIES}
     )
 
-add_library(trajectory_planner_ros
-	src/trajectory_planner.cpp
-	src/trajectory_planner_ros.cpp)
-add_dependencies(trajectory_planner_ros nav_msgs_gencpp)
-target_link_libraries(trajectory_planner_ros
-     base_local_planner)
-
-add_executable(point_grid src/point_grid.cpp)
-target_link_libraries(point_grid ${catkin_LIBRARIES})
-
 install(TARGETS
             base_local_planner
-            trajectory_planner_ros
        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+       ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        )
 
 install(FILES blp_plugin.xml
@@ -125,20 +105,3 @@ install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   PATTERN ".svn" EXCLUDE
 )
-
-if(CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(base_local_planner_utest
-    test/gtest_main.cpp
-    test/utest.cpp
-    test/velocity_iterator_test.cpp
-    test/footprint_helper_test.cpp
-    test/trajectory_generator_test.cpp
-    test/map_grid_test.cpp)
-  target_link_libraries(base_local_planner_utest
-      base_local_planner trajectory_planner_ros
-      )
-
-
-  catkin_add_gtest(line_iterator
-      test/line_iterator_test.cpp)
-endif()

@@ -186,20 +186,6 @@ void Costmap2DROS::resetOldParameters(ros::NodeHandle& nh)
   SuperValue super_map;
   SuperValue super_array;
 
-  if (nh.getParam("static_map", flag) && flag)
-  {
-    map["name"] = XmlRpc::XmlRpcValue("static_layer");
-    map["type"] = XmlRpc::XmlRpcValue("costmap_2d::StaticLayer");
-    super_map.setStruct(&map);
-    plugins.push_back(super_map);
-
-    ros::NodeHandle map_layer(nh, "static_layer");
-    move_parameter(nh, map_layer, "map_topic");
-    move_parameter(nh, map_layer, "unknown_cost_value");
-    move_parameter(nh, map_layer, "lethal_cost_threshold");
-    move_parameter(nh, map_layer, "track_unknown_space", false);
-  }
-
   ros::NodeHandle obstacles(nh, "obstacle_layer");
   if (nh.getParam("map_type", s) && s == "voxel")
   {

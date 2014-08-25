@@ -8,22 +8,17 @@ find_package(catkin REQUIRED
         geometry_msgs
         nav_core
         nav_msgs
-        pcl_conversions
-        pcl_ros
         pluginlib
         roscpp
         tf
-        visualization_msgs
         )
 
 find_package(Eigen REQUIRED)
-find_package(PCL REQUIRED)
 include_directories(
     include
     ${catkin_INCLUDE_DIRS}
     SYSTEM
     ${EIGEN_INCLUDE_DIRS}
-    ${PCL_INCLUDE_DIRS}
 )
 add_definitions(${EIGEN_DEFINITIONS})
 
@@ -68,6 +63,7 @@ target_link_libraries(navfn_node
 install(TARGETS navfn navfn_node
        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+       ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
        )
 
 install(DIRECTORY include/navfn/
@@ -122,7 +118,3 @@ endif (NAVFN_HAVE_FLTK AND NAVFN_HAVE_NETPBM AND NOT APPLE)
 # else (NAVFN_HAVE_NETPBM)
 #   message (STATUS "pgm.h not found (optional)")
 # endif (NAVFN_HAVE_NETPBM)
-
-if(CATKIN_ENABLE_TESTING)
-  add_subdirectory(test)
-endif()
