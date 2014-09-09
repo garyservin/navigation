@@ -186,43 +186,6 @@ void Costmap2DROS::resetOldParameters(ros::NodeHandle& nh)
   SuperValue super_map;
   SuperValue super_array;
 
-  ros::NodeHandle obstacles(nh, "obstacle_layer");
-  if (nh.getParam("map_type", s) && s == "voxel")
-  {
-
-    map["name"] = XmlRpc::XmlRpcValue("obstacle_layer");
-    map["type"] = XmlRpc::XmlRpcValue("costmap_2d::VoxelLayer");
-    super_map.setStruct(&map);
-    plugins.push_back(super_map);
-
-    move_parameter(nh, obstacles, "origin_z");
-    move_parameter(nh, obstacles, "z_resolution");
-    move_parameter(nh, obstacles, "z_voxels");
-    move_parameter(nh, obstacles, "mark_threshold");
-    move_parameter(nh, obstacles, "unknown_threshold");
-    move_parameter(nh, obstacles, "publish_voxel_map");
-  }
-  else
-  {
-    map["name"] = XmlRpc::XmlRpcValue("obstacle_layer");
-    map["type"] = XmlRpc::XmlRpcValue("costmap_2d::ObstacleLayer");
-    super_map.setStruct(&map);
-    plugins.push_back(super_map);
-  }
-
-  move_parameter(nh, obstacles, "max_obstacle_height");
-  move_parameter(nh, obstacles, "raytrace_range");
-  move_parameter(nh, obstacles, "obstacle_range");
-  move_parameter(nh, obstacles, "track_unknown_space", true);
-  nh.param("observation_sources", s, std::string(""));
-  std::stringstream ss(s);
-  std::string source;
-  while (ss >> source)
-  {
-    move_parameter(nh, obstacles, source);
-  }
-  move_parameter(nh, obstacles, "observation_sources");
-
   ros::NodeHandle inflation(nh, "inflation_layer");
   move_parameter(nh, inflation, "cost_scaling_factor");
   move_parameter(nh, inflation, "inflation_radius");
