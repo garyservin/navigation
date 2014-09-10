@@ -11,6 +11,8 @@ find_package(catkin REQUIRED
         message_generation
         nav_core
         tf
+        navfn
+        straight_line_planner
 )
 find_package(Eigen REQUIRED)
 add_definitions(${EIGEN_DEFINITIONS})
@@ -24,6 +26,8 @@ catkin_package(
     CATKIN_DEPENDS
         roscpp
         dynamic_reconfigure
+        navfn
+        straight_line_planner
 )
 
 include_directories(

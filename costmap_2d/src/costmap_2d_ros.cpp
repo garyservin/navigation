@@ -128,10 +128,12 @@ Costmap2DROS::Costmap2DROS(std::string name, tf::TransformListener& tf) :
 
   // subscribe to the footprint topic
   std::string topic_param, topic;
-  if(!private_nh.searchParam("footprint_topic", topic_param))
-  {
-    topic_param = "footprint_topic";
-  }
+  //if(!private_nh.searchParam("footprint_topic", topic_param))
+  //{
+  //  topic_param = "footprint_topic";
+  //}
+
+  private_nh.param("footprint_topic", topic_param, std::string("footprint_topic"));
 
   private_nh.param(topic_param, topic, std::string("footprint"));
   footprint_sub_ = private_nh.subscribe(topic, 1, &Costmap2DROS::setUnpaddedRobotFootprintPolygon, this);
@@ -332,8 +334,6 @@ void Costmap2DROS::readFootprintFromParams( ros::NodeHandle& nh )
   std::string full_param_name;
   std::string full_radius_param_name;
 
-  if( nh.searchParam( "footprint", full_param_name ))
-  {
     XmlRpc::XmlRpcValue footprint_xmlrpc;
     nh.getParam( full_param_name, footprint_xmlrpc );
     if( footprint_xmlrpc.getType() == XmlRpc::XmlRpcValue::TypeString )
@@ -348,14 +348,6 @@ void Costmap2DROS::readFootprintFromParams( ros::NodeHandle& nh )
       readFootprintFromXMLRPC( footprint_xmlrpc, full_param_name );
       writeFootprintToParam( nh );
     }
-  }
-  else if( nh.searchParam( "robot_radius", full_radius_param_name ))
-  {
-    double robot_radius;
-    nh.param( full_radius_param_name, robot_radius, 1.234 );
-    setFootprintFromRadius( robot_radius );
-    nh.setParam( "robot_radius", robot_radius );
-  }
   // Else neither param was found anywhere this knows about, so
   // defaults will come from dynamic_reconfigure stuff, set in
   // cfg/Costmap2D.cfg and read in this file in reconfigureCB().
