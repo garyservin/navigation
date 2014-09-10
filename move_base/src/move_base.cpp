@@ -953,16 +953,6 @@ namespace move_base {
       n.setParam("conservative_reset/reset_distance", conservative_reset_dist_);
       n.setParam("aggressive_reset/reset_distance", circumscribed_radius_ * 4);
 
-    //first, we'll load a recovery behavior to clear the costmap
-    boost::shared_ptr<nav_core::RecoveryBehavior> cons_clear(new clear_costmap_recovery::ClearCostmapRecovery());
-    cons_clear->initialize(std::string("conservative_reset"), &tf_, planner_costmap_ros_, controller_costmap_ros_);
-    recovery_behaviors_.push_back(cons_clear);
-
-    //next, we'll load a recovery behavior that will do an aggressive reset of the costmap
-    boost::shared_ptr<nav_core::RecoveryBehavior> ags_clear(new clear_costmap_recovery::ClearCostmapRecovery());
-    ags_clear->initialize(std::string("aggressive_reset"), &tf_, planner_costmap_ros_, controller_costmap_ros_);
-    recovery_behaviors_.push_back(ags_clear);
-
     return;
   }
 
