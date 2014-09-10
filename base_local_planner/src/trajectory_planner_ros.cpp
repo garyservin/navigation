@@ -146,8 +146,8 @@ namespace base_local_planner {
       //just do an upward search for the frequency at which its being run. This
       //also allows the frequency to be overwritten locally.
       std::string controller_frequency_param_name;
-      if(!private_nh.searchParam("controller_frequency", controller_frequency_param_name))
-        sim_period_ = 0.05;
+      //if(!private_nh.searchParam("controller_frequency", controller_frequency_param_name))
+      //  sim_period_ = 0.05;
       else
       {
         double controller_frequency = 0;
