@@ -12,7 +12,7 @@ find_package(catkin REQUIRED
         nav_core
         tf
         navfn
-        ardrone_autonav
+        straight_line_planner
         clear_costmap_recovery
 )
 find_package(Eigen REQUIRED)
@@ -28,7 +28,7 @@ catkin_package(
         roscpp
         dynamic_reconfigure
         navfn
-        ardrone_autonav
+        straight_line_planner
         clear_costmap_recovery
 )
 
