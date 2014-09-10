@@ -11,6 +11,9 @@ find_package(catkin REQUIRED
         message_generation
         nav_core
         tf
+        navfn
+        ardrone_autonav
+        clear_costmap_recovery
 )
 find_package(Eigen REQUIRED)
 add_definitions(${EIGEN_DEFINITIONS})
@@ -24,6 +27,9 @@ catkin_package(
     CATKIN_DEPENDS
         roscpp
         dynamic_reconfigure
+        navfn
+        ardrone_autonav
+        clear_costmap_recovery
 )
 
 include_directories(
