@@ -57,7 +57,6 @@
 
 #include <navfn/navfn_ros.h>
 #include <straight_line_planner/straight_line_planner.h>
-#include <clear_costmap_recovery/clear_costmap_recovery.h>
 
 #include <dynamic_reconfigure/server.h>
 #include "move_base/MoveBaseConfig.h"

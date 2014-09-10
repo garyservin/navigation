@@ -214,7 +214,7 @@ namespace move_base {
       controller_plan_->clear();
       resetState();
 
-      lock.unlock()
+      lock.unlock();
     }
 
     if(config.base_local_planner != last_config_.base_local_planner){
