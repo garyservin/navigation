@@ -13,7 +13,6 @@ find_package(catkin REQUIRED
         tf
         navfn
         straight_line_planner
-        clear_costmap_recovery
 )
 find_package(Eigen REQUIRED)
 add_definitions(${EIGEN_DEFINITIONS})
@@ -29,7 +28,6 @@ catkin_package(
         dynamic_reconfigure
         navfn
         straight_line_planner
-        clear_costmap_recovery
 )
 
 include_directories(
